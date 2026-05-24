@@ -1,6 +1,6 @@
 """mdtable — render GFM Markdown tables from headers + rows."""
+
 from __future__ import annotations
-from typing import Iterable, List, Sequence, Union
 
 __all__ = ["render", "AlignmentError", "normalize_alignment"]
 __version__ = "0.1.0"
@@ -11,10 +11,14 @@ class AlignmentError(ValueError):
 
 
 _ALIGN_MAP = {
-    "l": "left", "left": "left",
-    "c": "center", "center": "center",
-    "r": "right", "right": "right",
-    "": "default", None: "default",
+    "l": "left",
+    "left": "left",
+    "c": "center",
+    "center": "center",
+    "r": "right",
+    "right": "right",
+    "": "default",
+    None: "default",
 }
 
 
@@ -46,7 +50,7 @@ def _pad(value: str, width: int, align: str) -> str:
 
 def render(headers, rows, align=None):
     headers_e = [_escape(h) for h in headers]
-    rows_e: List[List[str]] = [[_escape(c) for c in r] for r in rows]
+    rows_e: list[list[str]] = [[_escape(c) for c in r] for r in rows]
     n = len(headers_e)
     if any(len(r) != n for r in rows_e):
         raise ValueError("every row must have the same number of cells as headers")
@@ -64,14 +68,27 @@ def render(headers, rows, align=None):
         for i in range(n)
     ]
     body_aligns = ["left" if a == "default" else a for a in aligns]
-    out = ["| " + " | ".join(_pad(headers_e[i], widths[i], body_aligns[i]) for i in range(n)) + " |"]
-    out.append("| " + " | ".join(
-        seps[i].ljust(widths[i], "-") if aligns[i] == "default"
-        else _adjust_sep(seps[i], widths[i], aligns[i])
-        for i in range(n)
-    ) + " |")
+    out = [
+        "| "
+        + " | ".join(_pad(headers_e[i], widths[i], body_aligns[i]) for i in range(n))
+        + " |"
+    ]
+    out.append(
+        "| "
+        + " | ".join(
+            seps[i].ljust(widths[i], "-")
+            if aligns[i] == "default"
+            else _adjust_sep(seps[i], widths[i], aligns[i])
+            for i in range(n)
+        )
+        + " |"
+    )
     for r in rows_e:
-        out.append("| " + " | ".join(_pad(r[i], widths[i], body_aligns[i]) for i in range(n)) + " |")
+        out.append(
+            "| "
+            + " | ".join(_pad(r[i], widths[i], body_aligns[i]) for i in range(n))
+            + " |"
+        )
     return "\n".join(out)
 
 

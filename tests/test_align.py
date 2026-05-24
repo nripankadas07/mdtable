@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-import pytest
 
-from mdtable import AlignmentError, normalize_alignment, render
+from mdtable import render
 
 
 def _separator(out: str) -> str:
