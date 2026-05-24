@@ -29,7 +29,7 @@ match data-cell widths so the source Markdown stays visually aligned.
 ## Install
 
 ```bash
-pip install mdtable
+python -m pip install -e .
 ```
 
 (or, in this repository's checkout: `pip install -e .`)
